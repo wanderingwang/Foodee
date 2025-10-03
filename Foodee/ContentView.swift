@@ -8,17 +8,39 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var userInput: String = ""   // what the user types
+    @State private var messages: [String] = []  // history of messages
+
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+            // Chat messages shown as a list
+            List(messages, id: \.self) { msg in
+                Text(msg)
+            }
+
+            HStack {
+                TextField("Type your question...", text: $userInput)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .padding(.horizontal)
+
+                Button("Send") {
+                    sendMessage()
+                }
+                .padding(.trailing)
+            }
         }
-        .padding()
+    }
+
+    func sendMessage() {
+        guard !userInput.isEmpty else { return }
+        messages.append("You: \(userInput)")
+        // For now, fake a response
+        messages.append("App: Thinking about '\(userInput)'...")
+        userInput = ""
     }
 }
 
 #Preview {
     ContentView()
 }
+
